@@ -53,6 +53,15 @@ class cti_action(osv.osv):
             if not ids:
                 param_obj.set_param(cr, 1, key, func())
 
+    def compose_incoming_url(self, cr, context=None):
+        """
+        Compose the URL with
+        """
+        ir_config_obj = self.pool.get('ir.config_parameter')
+        url = ir_config_obj.get_param(cr, 1, 'web.base.url', 'http://localhost:8069')
+        token = ir_config_obj.get_param(cr, 1, 'cti.uuid')
+        return '%s/cti/incoming?database=%s&user=%s&token=%s&phone=%s' % (url, cr.dbname, 'admin', token, 'XXX')
+
 cti_action()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

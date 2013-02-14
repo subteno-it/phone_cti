@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    phone_cti module for OpenERP, Computer telephony integration
-#    Copyright (C) 2013 SYLEAM (<http://www.syleam.fr/>) 
+#    Copyright (C) 2013 SYLEAM (<http://www.syleam.fr/>)
 #              Christophe CHAUVET <christophe.chauvet@syleam.fr>
 #
 #    This file is a part of phone_cti
@@ -22,8 +22,10 @@
 #
 ##############################################################################
 
-
-import report
-import wizard
+import services
+import controllers
+import cti
+#import report
+#import wizard
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
