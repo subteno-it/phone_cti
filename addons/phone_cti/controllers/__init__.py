@@ -30,6 +30,8 @@ except ImportError:
 import werkzeug.wrappers
 import werkzeug.utils
 
+URL_CONFIGURE = 'http://syleam.github.com/phone_cti/configuration.html'
+
 
 class CtiConnector(openerpweb.Controller):
     _cp_path = "/cti"
@@ -64,7 +66,7 @@ class CtiConnector(openerpweb.Controller):
         """
         if 'database' not in args:
             # if database parameters is missing, return to the documention page
-            return werkzeug.utils.redirect('http://www.syleam.fr/')
+            return werkzeug.utils.redirect(URL_CONFIGURE)
 
         try:
             return request.session.proxy('cti').help(args.get('database'))
