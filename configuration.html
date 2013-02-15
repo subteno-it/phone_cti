@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CTI Connector’s for OpenERP &mdash; CTI Connector 1.0 documentation</title>
+    <title>Configuration &mdash; CTI Connector 1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="CTI Connector 1.0 documentation" href="#" />
-    <link rel="next" title="Installation" href="installation.html" /> 
+    <link rel="top" title="CTI Connector 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
   <body>
     <div class="related">
@@ -36,8 +36,8 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="installation.html" title="Installation"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">CTI Connector 1.0 documentation</a> &raquo;</li> 
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CTI Connector 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,26 +46,24 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="cti-connector-s-for-openerp">
-<h1>CTI Connector&#8217;s for OpenERP<a class="headerlink" href="#cti-connector-s-for-openerp" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#desktop-pc">Desktop PC</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="desktop-pc">
+<h2>Desktop PC<a class="headerlink" href="#desktop-pc" title="Permalink to this headline">¶</a></h2>
+<p>When CTI program is installed on your PC Descktop, when an incoming call arrive it can be possible to open a Web Browser
+and launch a specific URL, in this URL it can be possible to pass the phone number in the URL</p>
+<p>The <tt class="docutils literal"><span class="pre">phone_cti</span></tt> connector can be analyse the URL and can return a return a redirect to another URL, eg: open the partner form</p>
+<p>Each database containt a specific token to identify the query, and must be pass to the URL, be to help to configure we provide a test URL, that return the real URL</p>
+<p>Open a web browser, and launch this URL <tt class="docutils literal"><span class="pre">http://localhost:8069/cti/test</span></tt> it open this page</p>
+<p>You must provide the <tt class="docutils literal"><span class="pre">database</span></tt> parameter and the name of the database as value like <tt class="docutils literal"><span class="pre">http://localhost:8069/cti/test?database=demo_cti</span></tt></p>
+<p>and see this screenshot</p>
+<img alt="_images/test_url_token.png" src="_images/test_url_token.png" />
+<p>You must copy/paste the URL provide on the CTI component and replace <strong>XXX</strong> on <tt class="docutils literal"><span class="pre">phone</span></tt> parameter by the substitute value (eg: %1 $1)</p>
+<p>For my example, the URL with substitute parameter <tt class="docutils literal"><span class="pre">%1</span></tt></p>
+<div class="highlight-text"><div class="highlight"><pre>http://localhost:8069/cti/incoming?database=demo_cti&amp;user=admin&amp;token=a92b50e2-775b-11e2-98ff-0800270e2ebc&amp;phone=%1
+</pre></div>
 </div>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
 </div>
 
 
@@ -74,22 +72,22 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">CTI Connector&#8217;s for OpenERP</a><ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#desktop-pc">Desktop PC</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="installation.html" title="next chapter">Installation</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
   </ul></li>
 </ul>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
+    <li><a href="_sources/configuration.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
