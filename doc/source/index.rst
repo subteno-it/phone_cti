@@ -3,14 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CTI Connector's documentation!
-=========================================
+CTI Connector's for OpenERP
+===========================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
+   installation.rst
+   configuration.rst
 
 
 Indices and tables
