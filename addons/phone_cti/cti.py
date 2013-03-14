@@ -48,7 +48,11 @@ class cti_action(osv.osv):
         'model_id': fields.many2one('ir.model', 'Model', help='Model to launch search or name_search'),
         'field_name': fields.char('Field name', size=32, help='Field name to pass on search to find records'),
         'act_window_id': fields.many2one('ir.actions.act_window', 'Act Window', help='Select act windows'),
+        'create_entry': fields.boolean('Create an entry', help='Create a new entry before display it'),
+    }
 
+    _defaults = {
+        'create_entry': False,
     }
 
     def init(self, cr):
@@ -136,7 +140,15 @@ class cti_action(osv.osv):
             # No action found on this company
             return url
 
-        return self._format_url_from_action(cr, uid, url, company.cti_action_id.model_id.model, company.cti_action_id.act_window_id.id, partner_id, context=user_context)
+        # Check custom for this action
+        current_act = self.browse(cr, uid, company.cti_action_id.id, context=user_context)
+        if current_act.create_entry:
+            entry_id = self.pool.get(current_act.model_id.model).create(cr, uid, {'partner_id': partner_id}, context=user_context)
+            cr.commit()
+        else:
+            entry_id = partner_id or address_id
+
+        return self._format_url_from_action(cr, uid, url, company.cti_action_id.model_id.model, company.cti_action_id.act_window_id.id, entry_id, context=user_context)
 
 cti_action()
 
