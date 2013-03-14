@@ -29,6 +29,7 @@ import uuid
 
 _default_parameters = {
     "cti.uuid": lambda: str(uuid.uuid1()),
+    "cti.url_config": lambda: 'http://syleam.github.com/phone_cti/configuration.html',
 }
 
 
