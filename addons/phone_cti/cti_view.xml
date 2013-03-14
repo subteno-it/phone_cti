@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        ##############################################################################
+        #
+        #    phone_cti module for OpenERP, Computer telephony integration
+        #    Copyright (C) 2013 SYLEAM ([http://www.syleam.fr/]) 
+        #              Christophe CHAUVET [christophe.chauvet@syleam.fr]
+        #
+        #    This file is a part of phone_cti
+        #
+        #    phone_cti is free software: you can redistribute it and/or modify
+        #    it under the terms of the GNU Affero General Public License as published by
+        #    the Free Software Foundation, either version 3 of the License, or
+        #    (at your option) any later version.
+        #
+        #    phone_cti is distributed in the hope that it will be useful,
+        #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        #    GNU Affero General Public License for more details.
+        #
+        #    You should have received a copy of the GNU Affero General Public License
+        #    along with this program.  If not, see [http://www.gnu.org/licenses/].
+        #
+        ##############################################################################
+
+        <record id="view_cti_action_tree" model="ir.ui.view">
+            <field name="name">cti.action.tree</field>
+            <field name="model">cti.action</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="CTI Action">
+                    <field name="name"/>
+                    <field name="model_id"/>
+                    <field name="field_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_cti_action_form" model="ir.ui.view">
+            <field name="name">cti.action.form</field>
+            <field name="model">cti.action</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="CTI Action">
+                    <field name="name" select="1"/>
+                    <field name="model_id"/>
+                    <field name="field_name"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_cti_action_search" model="ir.ui.view">
+            <field name="name">cti.action.search</field>
+            <field name="model">cti.action</field>
+            <field name="type">search</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <search string="CTI Action">
+                    <field name="name" select="True"/>
+                    <field name="model_id"/>
+                    <field name="field_name"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_cti_action_view">
+            <field name="name">CTI Action</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cti.action</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_cti_action_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_cti_action_view_form">
+            <field name="act_window_id" ref="act_open_cti_action_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_cti_action_form"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_cti_action_view_tree">
+            <field name="act_window_id" ref="act_open_cti_action_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_cti_action_tree"/>
+        </record>
+
+        <menuitem id="menu_cti_action"
+            parent="base.menu_config"
+            sequence="20"
+            action="act_open_cti_action_view"/>
+
+    </data>
+</openerp>
