@@ -38,8 +38,6 @@ class cti(netsvc.ExportService):
         netsvc.ExportService.__init__(self, name)
 
     def _check_auth(self, db, user, token):
-        import pdb
-        pdb.set_trace()
         pool = pooler.get_pool(db)
         cr = pooler.get_db(db).cursor()
         # Check if token is valid
@@ -57,32 +55,18 @@ class cti(netsvc.ExportService):
         cr.close()
         raise openerp.exceptions.AccessDenied()
 
-    def _pdi_dispatch(self, dbname, method_name, *method_args):
-        try:
-            registry = openerp.modules.registry.RegistryManager.get(dbname)
-            assert registry, 'Unknown database %s' % dbname
-            edi_document = registry['edi.document']
-            cr = registry.db.cursor()
-            res = None
-            res = getattr(edi_document, method_name)(cr, *method_args)
-            cr.commit()
-        except Exception:
-            _logger.exception('Failed to execute EDI method %s with args %r', method_name, method_args)
-            raise
-        finally:
-            cr.close()
-        return res
-
-    def exp_incoming(self, dbname, username, token, values=None, *method_args):
+    def exp_incoming(self, dbname, username, token, values=None, context=None, uid=False, *method_args):
         """
         Pass the phone number, token and user to search action to return
         and return the URL
         """
+        res = 'http://www.syleam.fr'
         try:
             registry = openerp.modules.registry.RegistryManager.get(dbname)
             assert registry, 'Unknown database %s' % dbname
             cr = registry.db.cursor()
-            res = getattr(registry['cti.action'], 'inspect_incoming')(cr, *method_args)
+            res = getattr(registry['cti.action'], 'inspect_incoming')(cr, uid, values, context)
+            return res
 
             cr.commit()
         except Exception:
@@ -91,7 +75,7 @@ class cti(netsvc.ExportService):
         finally:
             cr.close()
 
-        return 'http://www.syleam.fr'
+        return res
 
     def exp_help(self, dbname):
         """
@@ -116,15 +100,17 @@ class cti(netsvc.ExportService):
         """
         Check method
         """
+        uid = False
+        fn = getattr(self, 'exp_' + method)
         if method in ('incoming'):
             (db, user, token) = params[0:3]
-            self._check_auth(db, user, token)
-        if method in ('help'):
+            uid = self._check_auth(db, user, token)
+            return fn(*params, uid=uid)
+        elif method in ('help'):
             pass
         else:
             raise KeyError("Method not found: %s" % method)
 
-        fn = getattr(self, 'exp_' + method)
         return fn(*params)
 
 cti()
