@@ -36,7 +36,7 @@
     'images': [],
     'update_xml': [
         #'security/groups.xml',
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         #'view/menu.xml',
         'cti_view.xml',
         #'wizard/wizard.xml',
