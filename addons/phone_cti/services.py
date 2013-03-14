@@ -28,6 +28,7 @@ import pooler
 import logging
 import openerp.exceptions
 from psycopg2 import OperationalError
+from openerp import SUPERUSER_ID
 
 _logger = logging.getLogger('cti.service')
 
@@ -37,8 +38,23 @@ class cti(netsvc.ExportService):
         netsvc.ExportService.__init__(self, name)
 
     def _check_auth(self, db, user, token):
+        import pdb
+        pdb.set_trace()
         pool = pooler.get_pool(db)
-        user_obj = pool.get('res.users')
+        cr = pooler.get_db(db).cursor()
+        # Check if token is valid
+        db_token = pool.get('ir.config_parameter').get_param(cr, SUPERUSER_ID, 'cti.uuid')
+        if db_token != token:
+            cr.close()
+            raise openerp.exceptions.AccessDenied()
+
+        # check if user exists
+        user_id = pool.get('res.users').search(cr, SUPERUSER_ID, [('login','=',user)])
+        if user_id:
+            cr.close()
+            return user_id[0]
+
+        cr.close()
         raise openerp.exceptions.AccessDenied()
 
     def _pdi_dispatch(self, dbname, method_name, *method_args):
@@ -97,6 +113,9 @@ class cti(netsvc.ExportService):
         return res
 
     def dispatch(self, method, params):
+        """
+        Check method
+        """
         if method in ('incoming'):
             (db, user, token) = params[0:3]
             self._check_auth(db, user, token)
