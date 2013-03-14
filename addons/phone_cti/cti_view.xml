@@ -34,6 +34,7 @@
                     <field name="name"/>
                     <field name="model_id"/>
                     <field name="field_name"/>
+                    <field name="act_window_id"/>
                 </tree>
             </field>
         </record>
@@ -48,6 +49,7 @@
                     <field name="name" select="1"/>
                     <field name="model_id"/>
                     <field name="field_name"/>
+                    <field name="act_window_id"/>
                 </form>
             </field>
         </record>
@@ -95,6 +97,23 @@
             parent="base.menu_config"
             sequence="20"
             action="act_open_cti_action_view"/>
+
+        <!-- ************************************************************** -->
+        <!-- ** Add default action on company form ************************ -->
+        <!-- ************************************************************** -->
+        <record id="view_res_company_cti_form" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="priority" eval="30"/>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@string='Configuration']" position="inside">
+                    <separator string="CTI" colspan="4"/>
+                    <field name="cti_action_id"/>
+                </xpath>
+            </field>
+        </record>
 
     </data>
 </openerp>
