@@ -25,6 +25,11 @@
 from openerp.osv import osv
 from openerp.osv import fields
 import uuid
+import logging
+import urllib
+
+_logger = logging.getLogger('cti')
+_logger.isEnabledFor(logging.DEBUG)
 
 
 # You can inherit the cti.url_config in your profile if you want a custom documentation in your language
@@ -66,32 +71,11 @@ class cti_action(osv.osv):
         token = ir_config_obj.get_param(cr, 1, 'cti.uuid')
         return '%s/cti/incoming?database=%s&user=%s&token=%s&phone=%s' % (url, cr.dbname, 'admin', token, 'XXX')
 
-    def inspect_incoming(self, cr, uid, phone_number, context=None):
-        """
-        This function, check the phone number, and the user
-        """
-        # Retrieve the default URL for the web client when no action found
-        ir_config_obj = self.pool.get('ir.config_parameter')
-        url = ir_config_obj.get_param(cr, 1, 'web.base.url', 'http://localhost:8069')
-
-        # Retrieve the context for the user
-        user_context = self.pool.get('res.users').context_get(cr, uid, context=context)
-        if context is not None:
-            user_context.update(context)
-
-        # Search address and partner for this phone number
-        (partner_id, address_id) = self.find_partner_from_phone_number(cr, uid, phone_number, context=user_context)
-        if not partner_id and not address_id:
-            return url
-
-
-
-        return url
-
     def find_partner_from_phone_number(self, cr, uid, phone_number, context=None):
         """
         You can inherit this function, if you change the storage format for phone number in your database
         """
+        _logger.debug('Phone number: %s' % phone_number)
         if context is None:
             context = self.pool.get('res.users').context_get(cr, uid, context=context)
 
@@ -110,6 +94,49 @@ class cti_action(osv.osv):
         partner_id = partner_id and partner_id.id or False
 
         return partner_id, address_id
+
+    def _format_url_from_action(self, cr, uid, base_url, model, action_id, partner_id=False, address_id=False, context=None):
+
+        url_param = {
+            'id': partner_id,
+            'view_type': 'form',
+            'model': model,
+            'action_id': action_id,
+        }
+        return base_url + '/#' + urllib.urlencode(url_param)
+
+    def inspect_incoming(self, cr, uid, phone_number, context=None):
+        """
+        This function, check the phone number, and the user
+        """
+        # Retrieve the default URL for the web client, use to:
+        # - default URL when no action found
+        # - Compose the URL to return to the customer
+        ir_config_obj = self.pool.get('ir.config_parameter')
+        url = ir_config_obj.get_param(cr, 1, 'web.base.url', 'http://localhost:8069')
+
+        # Retrieve the context for the user
+        user_obj = self.pool.get('res.users')
+        user_context = user_obj.context_get(cr, uid, context=context)
+        if context is not None:
+            user_context.update(context)
+
+        # Search address and partner for this phone number
+        (partner_id, address_id) = self.find_partner_from_phone_number(cr, uid, phone_number, context=user_context)
+        if not partner_id and not address_id:
+            return url
+
+        # Check if default action is define from the company
+        company_id = user_obj.browse(cr, uid, uid, context=user_context).company_id
+        if not company_id:
+            return url
+
+        company = self.pool.get('res.company').browse(cr, uid, company_id.id, context=user_context)
+        if not company.cti_action_id:
+            # No action found on this company
+            return url
+
+        return self._format_url_from_action(cr, uid, url, company.cti_action_id.model_id.model, company.cti_action_id.act_window_id.id, partner_id, context=user_context)
 
 cti_action()
 
