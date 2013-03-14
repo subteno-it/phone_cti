@@ -53,8 +53,8 @@ class CtiConnector(openerpweb.Controller):
 
         try:
             context_cti = {'cti': True}
-            return request.session.proxy('cti').incoming(args.get('database'), args.get('user'),
-                                                         args.get('token'), args.get('phone'))
+            return werkzeug.utils.redirect(request.session.proxy('cti').incoming(args.get('database'), args.get('user'),
+                                                         args.get('token'), args.get('phone'), context_cti))
         except Exception, e:
             return werkzeug.wrappers.Response(str(e), status=400)
 
