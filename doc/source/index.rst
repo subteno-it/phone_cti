@@ -13,6 +13,7 @@ Contents:
 
    installation.rst
    configuration.rst
+   custom.rst
 
 
 Indices and tables
