@@ -18,6 +18,7 @@ You must provide the ``database`` parameter and the name of the database as valu
 and see this screenshot
 
 .. image:: images/test_url_token.png
+   :scale: 50 %
 
 You must copy/paste the URL provide on the CTI component and replace **XXX** on ``phone`` parameter by the substitute value (eg: %1 $1)
 
